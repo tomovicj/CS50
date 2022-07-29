@@ -1,3 +1,4 @@
+# [Week 0 - Scratch](https://cs50.harvard.edu/x/2022/weeks/0/)
 # Simple pong game
 I created a simple pong game for two players in [scratch](https://scratch.mit.edu/).
 Player one uses "w" and "s" while the second player uses up arrow and down arrow.
