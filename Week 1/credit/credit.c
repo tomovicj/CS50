@@ -20,12 +20,27 @@ int main(void)
 int counter(long number)
 {
     // Credit card numbers can only be 13-16 digits long
-    if (number >= 10000000000000000) return -1;             // Return -1 if the number is higher than 16 digits
-    if (number >= 1000000000000000) return 16;              // Return 16 if number is 16 digits long
-    if (number >= 100000000000000) return 15;               // Return 15 if number is 15 digits long
-    if (number >= 10000000000000) return 14;                // Return 14 if number is 14 digits long
-    if (number >= 1000000000000) return 13;                 // Return 13 if number is 13 digits long
-    return -1;                                              // Return -1 if the number is lower than 13 digits
+    if (number >= 10000000000000000)    // Return -1 if the number is higher than 16 digits
+    {
+        return -1;
+    }
+    if (number >= 1000000000000000)     // Return 16 if number is 16 digits long
+    {
+        return 16;
+    }
+    if (number >= 100000000000000)      // Return 15 if number is 15 digits long
+    {
+        return 15;
+    }
+    if (number >= 10000000000000)       // Return 14 if number is 14 digits long
+    {
+        return 14;
+    }
+    if (number >= 1000000000000)        // Return 13 if number is 13 digits long
+    {
+        return 13;
+    }
+    return -1;                          // Return -1 if the number is lower than 13 digits
 }
 
 int check(long number)
