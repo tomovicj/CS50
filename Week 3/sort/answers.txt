@@ -1,0 +1,11 @@
+sort1 uses: bubble sort
+
+How do you know?: Have the best sorting time for sorted50000.txt
+
+sort2 uses: merge sort
+
+How do you know?: Have the best sorting time for random50000.txt
+
+sort3 uses: selection sort
+
+How do you know?: Have the worst sorting time
