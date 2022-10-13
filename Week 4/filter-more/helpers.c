@@ -153,9 +153,18 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
             int green = round(sqrt(greennx * greennx + greenny * greenny));
             int blue = round(sqrt(bluenx * bluenx + blueny  * blueny));
 
-            if (red > 255) red = 255;
-            if (green > 255) green = 255;
-            if (blue > 255) blue = 255;
+            if (red > 255)
+            {
+                red = 255;
+            }
+            if (green > 255)
+            {
+                green = 255;
+            }
+            if (blue > 255)
+            {
+                blue = 255;
+            }
 
             image[i][j].rgbtRed = (BYTE) red;
             image[i][j].rgbtGreen = (BYTE) green;
@@ -182,21 +191,51 @@ int check(int height, int width, int i, int j)
 int get_nx(int x, int y)
 {
     int n;
-    if (x == 0 & y == 0 || x == -1 & y == 0 || x == 1 & y == 0) n = 0;
-    if (x == -1 & y == 1 || x == 1 & y == 1) n = 1;
-    if (x == -1 & y == -1 || x == 1 & y == -1) n = -1;
-    if (x == 0 & y == -1) n = -2;
-    if (x == 0 & y == 1) n = 2;
+    if (x == 0 & y == 0 || x == -1 & y == 0 || x == 1 & y == 0)
+    {
+        n = 0;
+    }
+    if (x == -1 & y == 1 || x == 1 & y == 1)
+    {
+        n = 1;
+    }
+    if (x == -1 & y == -1 || x == 1 & y == -1)
+    {
+        n = -1;
+    }
+    if (x == 0 & y == -1)
+    {
+        n = -2;
+    }
+    if (x == 0 & y == 1)
+    {
+        n = 2;
+    }
     return n;
 }
 
 int get_ny(int x, int y)
 {
     int n;
-    if (x == 0 & y == 0 || x == 0 & y == -1 || x == 0 & y == 1) n = 0;
-    if (x == 1 & y == -1 || x == 1 & y == 1) n = 1;
-    if (x == -1 & y == -1 || x == -1 & y == 1) n = -1;
-    if (x == -1 & y == 0) n = -2;
-    if (x == 1 & y == 0) n = 2;
+    if (x == 0 & y == 0 || x == 0 & y == -1 || x == 0 & y == 1)
+    {
+        n = 0;
+    }
+    if (x == 1 & y == -1 || x == 1 & y == 1)
+    {
+        n = 1;
+    }
+    if (x == -1 & y == -1 || x == -1 & y == 1)
+    {
+        n = -1;
+    }
+    if (x == -1 & y == 0)
+    {
+        n = -2;
+    }
+    if (x == 1 & y == 0)
+    {
+        n = 2;
+    }
     return n;
 }

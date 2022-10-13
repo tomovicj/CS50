@@ -43,9 +43,18 @@ void sepia(int height, int width, RGBTRIPLE image[height][width])
             float fGreen = .349 * red + .686 * green + .168 * blue;
             float fBlue = .272 * red + .534 * green + .131 * blue;
 
-            if (fRed > 255) fRed = 255;
-            if (fGreen > 255) fGreen = 255;
-            if (fBlue > 255) fBlue = 255;
+            if (fRed > 255)
+            {
+                fRed = 255;
+            }
+            if (fGreen > 255)
+            {
+                fGreen = 255;
+            }
+            if (fBlue > 255)
+            {
+                fBlue = 255;
+            }
 
             BYTE sepiaRed = round(fRed);
             BYTE sepiaGreen = round(fGreen);
