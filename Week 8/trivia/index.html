@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+        <link href="styles.css" rel="stylesheet">
+        <title>Trivia!</title>
+        <script>
+            function multipleChoice(answer) {
+                const button = document.querySelectorAll(".answers")[answer];
+
+                if (answer === 1) {
+                    button.style.backgroundColor = "green";
+                    var node = document.createTextNode("Correct!");
+                }
+                else {
+                    button.style.backgroundColor = "red";
+                    var node = document.createTextNode("Incorrect");
+                }
+
+                const para = document.createElement("p");
+                para.appendChild(node);
+
+                const element = document.getElementsByClassName("section")[0];
+                const child = document.getElementById("0");
+                element.insertBefore(para, child);
+            }
+
+
+            function freeResponse() {
+                const input = document.querySelector("#answer");
+                let answer = input.value;
+
+                if (answer == "Nevada") {
+                    input.style.backgroundColor = "green";
+                    var node = document.createTextNode("Correct!");
+                }
+                else {
+                    input.style.backgroundColor = "red";
+                    var node = document.createTextNode("Incorrect");
+                }
+
+                const para = document.createElement("p");
+                para.appendChild(node);
+
+                const element = document.getElementsByClassName("section")[1];
+                const child = document.getElementById("answer");
+                element.insertBefore(para, child);
+            }
+        </script>
+    </head>
+    <body>
+        <div class="header">
+            <h1>Trivia!</h1>
+        </div>
+
+        <div class="container">
+            <div class="section">
+                <h2>Part 1: Multiple Choice</h2>
+                <hr>
+                <h3>Which country is responsible for giving us pizza and pasta?</h3>
+                <button class="answers" id="0" onclick="multipleChoice(0)">French</button>
+                <button class="answers" id="1" onclick="multipleChoice(1)">Italy</button>
+                <button class="answers" id="2" onclick="multipleChoice(2)">United States of America</button>
+                <button class="answers" id="3" onclick="multipleChoice(3)">Japan</button>
+            </div>
+
+            <div class="section">
+                <h2>Part 2: Free Response</h2>
+                <hr>
+                <h3>Area 51 is located in which US state?</h3>
+                <input type="text" id="answer">
+                <button onclick="freeResponse()">Check Answer</button>
+            </div>
+        </div>
+    </body>
+</html>
