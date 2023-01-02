@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+
+{% block title %}
+ | {{server["name"]}}
+{% endblock %}
+
+{% block main %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+<div class="container">
+  <div class="row">
+    {% if server["icon"] %}
+    <div class="col-12 col-lg-6">
+      <img src={{server["icon"]}} class="rounded-circle purple-border" alt="server icon">
+    </div>
+    <div class="col-12 col-lg-6 d-flex align-items-center justify-content-center">
+    {% else %}
+    <div class="col d-flex align-items-center justify-content-center">
+    {% endif %}
+    <div>
+      <p class="m-0 discord-purple"><span class="text-muted">Server name: </span>{{server["name"]}}</p>
+      <p class="m-0 discord-purple"><span class="text-muted">Server owner: </span>{{server["owner"]}}
+      <p class="m-0 discord-purple"><span class="text-muted">Server creation date: </span>{{server["created"]}}</p>
+    </div>
+    </div>
+  </div>
+  <div class="row mt-5">
+    <div class="col-12 col-lg-6">
+      <h3 class="text-muted">Messages per day</h3>
+      <canvas id="msg_count_chart" style="width:600px"></canvas>
+    </div>
+    <div class="col-12 col-lg-6">
+      <h3 class="text-muted">Members per day</h3>
+      <canvas id="member_count_chart"></canvas>
+    </div>
+  </div>
+</div>
+
+
+<script>
+var dates = [];
+var msg_count = [];
+var member_count = [];
+
+{% for i in data %}
+    dates.push("{{i["date"]}}")
+    msg_count.push({{i["msg_count"]}})
+    member_count.push({{i["member_count"]}})
+{% endfor %}
+
+new Chart("msg_count_chart", {
+    type: "line",
+    data: {
+    labels: dates,
+    datasets: [{
+        fill: false,
+        lineTension: 0,
+        backgroundColor: "rgba(114,137,218,1.0)",
+        borderColor: "rgba(114,137,218,0.3)",
+        data: msg_count
+    }]
+    },
+    options: {
+    legend: {display: false}
+    }
+});
+
+new Chart("member_count_chart", {
+    type: "line",
+    data: {
+    labels: dates,
+    datasets: [{
+        fill: false,
+        lineTension: 0,
+        backgroundColor: "rgba(114,137,218,1.0)",
+        borderColor: "rgba(114,137,218,0.3)",
+        data: member_count
+    }]
+    },
+    options: {
+    legend: {display: false}
+    }
+});
+</script>
+{% endblock %}
