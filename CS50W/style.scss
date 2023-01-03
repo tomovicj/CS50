@@ -19,6 +19,7 @@ body{
 
     .text-box{
         border-radius: 25px;
+        border: 2px solid black;
         width: 100%;
         padding: 10px;
         margin: 20px;
@@ -29,4 +30,8 @@ body{
         padding: 10px;
         margin: 10px;
     }
+}
+
+#advanced_search {
+    text-align: left;
 }
