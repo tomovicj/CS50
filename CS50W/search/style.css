@@ -1,0 +1,11 @@
+body {
+  font-family: Arial, Helvetica, sans-serif; }
+
+#nav {
+  font-size: 20px;
+  text-align: right; }
+  #nav li {
+    display: inline;
+    padding: 10px; }
+
+/*# sourceMappingURL=style.css.map */

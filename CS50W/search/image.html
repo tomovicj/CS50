@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Image Search</title>
+        <link rel="stylesheet" href="style.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    </head>
+    <body>
+        <div id="nav">
+            <ul>
+                <li><a href="index.html">Search</a></li>
+            </ul>
+        </div>
+        <div style="height: 75vh" class="d-flex align-items-center">
+            <div class="container">
+                <form action="https://www.google.com/search">
+                    <div class="row">
+                        <div class="col text-center">
+                            <input type="text" name="q" placeholder="Enter your search query" class="text-box rounded-pill w-50 p-2 border-dark">
+                            <input type="hidden" name="tbm" value="isch">
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col text-center">
+                            <input type="submit" value="Google Image Search" class="button m-1" style="font-size: 20px;">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
