@@ -1,0 +1,33 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Create New Page 
+{% endblock %}
+
+{% block body %}
+
+    <div class="container text-center p-5">
+        <form action="{% url 'add' %}" method="post">
+            <div class="row mb-1">
+                <div class="col-1">
+                    <p style="font-size: 20px;">Title:</p>
+                </div>
+                <div class="col-11">
+                    <input type="text" name="title" class="w-100" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <textarea name="text" class="w-100" style="height: 50vh;" required>Enter the Markdown content for the page.</textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    {% csrf_token %}
+                    <input type="submit" value="Create" class="btn btn-primary mt-3">
+                </div>
+            </div> 
+        </form>
+    </div>
+
+{% endblock %}
