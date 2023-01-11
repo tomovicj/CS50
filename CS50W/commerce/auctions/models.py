@@ -48,7 +48,6 @@ class Bid(models.Model):
 class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
-    time = models.DateTimeField(auto_now=True)
     comment = models.TextField(max_length=1000)
 
 

@@ -120,7 +120,8 @@ def listing(request, listing_id):
       "listing": Listing.objects.filter(pk = listing_id).first(),
       "bid": Bid.objects.order_by('-bid').filter(listing_id = listing_id).first(),
       "winner": Winner.objects.filter(listing_id = listing_id).first(),
-      "watchlist": bool(Watchlist.objects.filter(listing_id = listing_id, user_id = request.user.id))
+      "watchlist": bool(Watchlist.objects.filter(listing_id = listing_id, user_id = request.user.id)),
+      "comments": Comment.objects.filter(listing_id = listing_id)
     })
 
 
@@ -180,3 +181,13 @@ def watchlist(request):
         "bids": bids,
         "finished": []
     })
+
+
+def comment(request):
+    if request.method == "POST":
+        listing_id = request.POST["listing_id"]
+        author_id = request.user.id
+        content = request.POST["content"]
+        comment = Comment(listing_id = listing_id, author_id = author_id, comment = content)
+        comment.save()
+        return HttpResponseRedirect(reverse("listing", args=[listing_id]))

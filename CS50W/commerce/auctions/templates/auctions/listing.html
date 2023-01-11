@@ -63,5 +63,22 @@
             </div>
         </div>
     </div>
+    <div class="container">
+        <h2 class="text-center">Comments:</h2>
+        <form action="{% url 'comment' %}" method="post" class="text-center">
+            {% csrf_token %}
+            <input type="hidden" name="listing_id" value="{{ listing.pk }}">
+            <textarea name="content" rows="3" class="w-100"></textarea><br>
+            <input type="submit" value="Post Comment" class="btn btn-primary">
+        </form>
+        {% for comment in comments %}
+            <div class="row border mt-3 p-2">
+                <div class="col">
+                    <h4 class="mt-0">{{ comment.author }}</h4>
+                    <p class="mb-0">{{ comment.comment }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
