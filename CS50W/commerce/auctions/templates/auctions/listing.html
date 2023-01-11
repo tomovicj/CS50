@@ -1,0 +1,84 @@
+{% extends "auctions/layout.html" %}
+{% load auctions_extras %}
+
+{% block body %}
+<div class="container">
+    <div class="row row-cols-1 row-cols-lg-2">
+        <div class="col text-center p-3">
+            <img src="{{ listing.image }}"> 
+        </div>
+        <div class="col">
+            <h2>{{ listing.title }}</h2>
+            <p>{{ listing.description }}</p>
+            <div class="row row-cols-1 row-cols-sm-2">
+                <div class="col">
+                    <h4>
+                        {% if winner %}
+                            <b>{{ winner }}</b> won!
+                        {% else %}
+                            {% if bid %}
+                                {{ bid }}
+                            {% else %}
+                                No bids: ${{ listing.start_bid|floatformat:2 }}
+                            {% endif %}
+                        </h4>
+                    </div>
+                    {% if user.is_authenticated %}
+                        <div class="col">
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <p class="m-0 text-center text-danger" style="font-size: small;">{{ message }}</p>
+                                {% endfor %}
+                            {% endif %}
+                            {% if listing.owner.id == user.id %}
+                                <form action="{% url 'listing_end' %}" method="post" style="text-align: right;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="listing_id" value="{{ listing.pk }}">
+                                    <input type="submit" value="End the auctions" class="btn btn-primary">
+                                </form>
+                            {% else %}
+                                <form action="{% url 'bid' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="listing_id" value="{{ listing.id }}">
+                                    <div class="row">
+                                        <div class="col-9 pr-0">
+                                            <input class="form-control" style="border-radius: 0px;" type="number" name="bid" placeholder="Your bid" step="0.01" value="{% if bid %}{{ bid.bid|floatformat:2 }}{% else %}{{ listing.start_bid|floatformat:2 }}{% endif %}">
+                                        </div>
+                                        <div class="col-3 pl-0">
+                                            <input class="btn btn-primary" style="border-radius: 0px;" type="submit" value="Bid!">
+                                        </div>
+                                    </div> 
+                                </form>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div>
+                <form action="{% url 'watchlist' %}" method="post" style="text-align: right;" class="mt-2">
+                    {% csrf_token %}
+                    <input type="hidden" name="listing_id" value="{{ listing.id }}">
+                    <a href="#" onclick="this.parentNode.submit()" {% if watchlist %}class="text-danger"{% endif %} >{% if watchlist %}Remove from watchlist{% else %}Add to watchlist{% endif %}</a>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <h2 class="text-center">Comments:</h2>
+        <form action="{% url 'comment' %}" method="post" class="text-center">
+            {% csrf_token %}
+            <input type="hidden" name="listing_id" value="{{ listing.pk }}">
+            <textarea name="content" rows="3" class="w-100"></textarea><br>
+            <input type="submit" value="Post Comment" class="btn btn-primary">
+        </form>
+        {% for comment in comments %}
+            <div class="row border mt-3 p-2">
+                <div class="col">
+                    <h4 class="mt-0">{{ comment.author }}</h4>
+                    <p class="mb-0">{{ comment.comment }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "auctions/layout.html" %}
+{% load auctions_extras %}
+
+{% block body %}
+    <h2 class="text-center">
+        {% if title %}
+            {{ title }}
+        {% else %}
+            Active Listings
+            {% if category %}
+                in <b>{{ category }}</b> Category
+            {% endif %}
+        {% endif %}
+    </h2>
+
+    <div class="container">
+        {% for listing in listings %}
+            {% if listing.id not in finished %}
+                <div class="row p-3 border m-3 h-25" >
+                    <div class="col-12 col-lg-3 text-center">
+                        {% if listing.image %}
+                            <img src="{{ listing.image }}" class="img-fluid m-3">
+                        {% endif %}
+                    </div>
+                    <div class="col-12 col-lg-9">
+                        <h4><a href="{% url 'listing' listing.pk %}">{{ listing.title }}</a></h4>
+                        <p>{{ listing.description }}</p>
+                        <p class="mt-5" style="font-size: 1.5rem;"> 
+                            {% if bids|get:listing %}
+                                {{ bids|get:listing }}
+                            {% else %}
+                                No bids: ${{ listing.start_bid|floatformat:2 }}
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}
