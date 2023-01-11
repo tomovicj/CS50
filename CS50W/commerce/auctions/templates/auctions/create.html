@@ -2,14 +2,21 @@
 
 {% block body %}
     <div class="container text-center">
-        <form action="{% url 'add_listing'%}" method="post">
-            {% csrf_token %}
-            <input type="text" name="title" placeholder="Title" class="m-1 w-50" required><br>
-            <textarea name="description" rows="4" class="m-1 w-50" placeholder="Description"></textarea><br>
-            <input type="number" name="start_bid" placeholder="Starting bid price" class="m-1 w-50" required><br>
-            <input type="text" name="image" placeholder="Image URL" class="m-1 w-50"><br>
-            <input type="text" name="category" placeholder="Category" class="m-1 w-50"><br>
-            <input type="submit" value="Create" class="btn btn-primary m-1">
-        </form>
+        <div class="d-flex justify-content-center m-2">
+            <form action="{% url 'create'%}" method="post" class="w-50">
+                {% csrf_token %}
+                    <input type="text" name="title" placeholder="Title" class="form-control" required><br>
+                    <textarea name="description" rows="4" class="form-control" placeholder="Description"></textarea><br>
+                    <input type="number" min="0.01" step="0.01" name="start_bid" placeholder="Starting bid price" class="form-control" required><br>
+                    <input type="url" name="image" placeholder="Image URL" class="form-control"><br>
+                    <select name="category" class="form-control">
+                    <option value="none" selected disabled hidden>Select a category</option>
+                        {% for category in categories %}
+                            <option value="{{ category.0 }}">{{ category.1 }}</option>
+                        {% endfor %}
+                    </select>
+                <input type="submit" value="Create" class="btn btn-primary m-3">
+            </form>
+        </div>
     </div>
 {% endblock %}
