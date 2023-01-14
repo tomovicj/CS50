@@ -31,6 +31,7 @@ function compose_email(recipients, subject, body) {
 
   // Send email
   document.querySelector('#compose-form').addEventListener('submit', (event) => {
+    event.preventDefault();
     fetch('/emails', {
       method: 'POST',
       body: JSON.stringify({
@@ -39,10 +40,7 @@ function compose_email(recipients, subject, body) {
           body: document.querySelector('#compose-body').value
       })
     })
-    .then(() => {
-        event.preventDefault();
-        load_mailbox('sent');
-      });
+    .then(() => load_mailbox('sent'));
     });    
   }      
   
