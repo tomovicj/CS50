@@ -118,15 +118,77 @@ document.addEventListener('DOMContentLoaded', () => {
        }
     }
 
+    function pagination(type, num_pages, on_page) {
+        const pagination = document.createElement('ul');
+        pagination.classList.add('pagination', 'justify-content-center', 'mt-3');
+        feed.appendChild(pagination);
 
-    function load_feed(type = 'all') {
+        const previous = document.createElement('li');
+        previous.classList.add('page-item');
+        previous.style.cursor = 'pointer';
+        pagination.appendChild(previous);
+        if (!(on_page > 1)) {
+            previous.classList.add('disabled');
+            previous.style.cursor = 'default';
+        }
+        else {
+            previous.addEventListener('click', () => load_feed(type, on_page - 1));
+        }
+
+        let span = document.createElement('span');
+        span.classList.add('page-link');
+        span.textContent = 'Previous';
+        previous.appendChild(span);
+
+        for (let i = 1; i < num_pages + 1; i++) {
+            const page = document.createElement('li');
+            page.classList.add('page-item');
+            page.style.cursor = 'pointer';
+            pagination.appendChild(page);
+
+            const span = document.createElement('span');
+            span.classList.add('page-link');
+            span.textContent = i;
+            page.appendChild(span);
+
+            if (i === on_page) {
+                page.classList.add('active');
+            }
+
+            page.addEventListener('click', () => {
+                load_feed(type, i);
+            })
+        }
+
+        const next = document.createElement('li');
+        next.classList.add('page-item');
+        next.style.cursor = 'pointer';
+        pagination.appendChild(next);
+        if (!(on_page < num_pages)) {
+            next.classList.add('disabled');
+            next.style.cursor = 'default';
+        }
+        else {
+            next.addEventListener('click', () => load_feed(type, on_page + 1));
+        }
+        
+        span = document.createElement('span');
+        span.classList.add('page-link');
+        span.textContent = 'Next';
+        next.appendChild(span);
+
+    }
+
+
+    function load_feed(type = 'all', page = 1) {
         new_form();
         feed.innerHTML = '';
+        // const num_pages = null;
     
-        fetch(`/feed/${type}`)
+        fetch(`/feed/${type}?page=${page}`)
         .then(response => response.json())
-        .then(posts => {
-            posts['posts'].forEach(post => {
+        .then(data => {
+            data['posts'].forEach(post => {
                 const row = document.createElement('div');
                 row.setAttribute('id',`post-${post.id}`);
                 row.classList.add('row', 'border', 'p-2', 'mb-1');
@@ -179,6 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     edit_link.addEventListener('click', () => edit(post.id))
                 }
             });
+            pagination(type, data["num_pages"], data["on_page"]);
         })
         .catch((error) => {
             console.error('Error:', error);

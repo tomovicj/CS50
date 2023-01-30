@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -90,14 +91,26 @@ def load_feed(request, type):
     else:
         load_feed(request, "all")
 
+    # Paginations
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    number_of_pages = paginator.num_pages
+    try:
+        # returns the desired page object
+        page_obj = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        # if page_number is not an integer then assign the first page
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        # if page is empty then return last page
+        page_obj = paginator.page(number_of_pages)
+
+
     posts_list = []
-    for post in posts:
+    for post in list(page_obj.object_list):
         post_qs = Post.objects.filter(pk = post["id"]).first()
         author = post_qs.author.username
         likes = post_qs.likes.all()
-
-        # post.pop("_state")
-        # post.pop("author_id")
 
         post["author"] = author
         post["mine"] = author == request.user.username
@@ -106,7 +119,11 @@ def load_feed(request, type):
 
         posts_list.append(post)
     
-    return JsonResponse({"posts": posts_list})
+    return JsonResponse({
+        "num_pages": number_of_pages,
+        "on_page": page_obj.number,
+        "posts": posts_list
+    })
 
 
 @csrf_exempt
