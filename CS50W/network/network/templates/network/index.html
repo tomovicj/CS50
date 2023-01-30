@@ -1,0 +1,20 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+    {% if user.is_authenticated %}
+    <div class="container border p-3" id="new">
+        <div class="alert alert-danger" role="alert" style="display: none;"></div>
+        <h3></h3>
+        <form>
+            {% csrf_token %}
+            <textarea class="form-control mb-2" rows="3" name="content" id="new_content"></textarea>
+            <input type="submit" id="post_button" value="Post!" class="btn btn-primary">
+            <input type="submit" id="edit_button" value="Edit" style="display: none;" class="btn btn-primary">
+        </form>
+    </div>
+    {% endif %}
+    <div class="container p-3" id="feed"></div>
+    
+    <script src="{% static 'network/app.js' %}"></script>
+{% endblock %}
