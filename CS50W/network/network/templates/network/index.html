@@ -14,6 +14,26 @@
         </form>
     </div>
     {% endif %}
+    <div class="container border p-3" id="profile">
+        <div class="row">
+            <div class="col-12">
+                <h2 id="username"></h2>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-6">
+                <h4>Followers:</h4>
+                <h4 id="followers-count"></h4>
+            </div>
+            <div class="col-6">
+                <h4>Following:</h4>
+                <h4 id="following-count"></h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12" id="place-for-follow-btn"></div>
+        </div>
+    </div>
     <div class="container p-3" id="feed"></div>
     
     <script src="{% static 'network/app.js' %}"></script>

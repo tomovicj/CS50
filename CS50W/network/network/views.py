@@ -88,6 +88,14 @@ def load_feed(request, type):
             followers_qs = Follow.objects.filter(follower_id = request.user.id)
             followers = [follower.pk for follower in followers_qs]
             posts = Post.objects.filter(author_id__in = followers).order_by('-time').values()
+    elif type == "profile":
+        id = request.GET.get("id")
+        if id:
+            posts = Post.objects.filter(author_id = id).order_by('-time').values()
+        else:    
+            username = request.GET.get("username")
+            user = User.objects.filter(username = username).first()
+            posts = Post.objects.filter(author_id = user.id).order_by('-time').values()
     else:
         load_feed(request, "all")
 
@@ -164,3 +172,20 @@ def edit(request, post_id):
                     return HttpResponse({"status": "True"})
         return HttpResponse({"status": True})
     return HttpResponseRedirect(reverse("index"))
+
+
+def profile(request, username):
+    user = User.objects.filter(username = username).first()
+    authenticated = request.user.is_authenticated
+    following_status = False
+    if authenticated:
+        following_status = user in [x.followe for x in request.user.follower.all()]
+    return JsonResponse({
+        "id": user.id,
+        "username": user.username,
+        "followers_count": len(user.followe.all()),
+        "following_count": len(user.follower.all()),
+        "following_status": following_status,
+        "authenticated": authenticated,
+        "mine": user.username == request.user.username
+    })
