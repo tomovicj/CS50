@@ -12,5 +12,6 @@ urlpatterns = [
     path("feed/<str:type>", views.load_feed, name="feed_load"),
     path("like", views.like, name="like"),
     path("edit/<int:post_id>", views.edit, name="edit"),
-    path("profile/<str:username>", views.profile, name="profile")
+    path("profile/<str:username>", views.profile, name="profile"),
+    path("follow", views.follow, name="follow")
 ]

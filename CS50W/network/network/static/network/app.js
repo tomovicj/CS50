@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     function new_form() {
-        profile_div.style.display = 'none';
         if (create_new !== null) {
             const alert = create_new.querySelector('.alert-danger');
             const post_button = create_new.querySelector('#post_button');
@@ -47,6 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 });
             }
+            profile_div.style.display = 'none';
+            create_new.style.display = 'block';
         }
     }
 
@@ -183,20 +184,50 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     function profile(username) {
-        create_new.style.display = 'none';
+        window.history.pushState({}, username, `/@${username}`);
+        window.onpopstate = (event) => {
+            window.history.replaceState({}, '', '/');
+            load_feed();
+        };
+
+        if (create_new) {
+            create_new.style.display = 'none';
+        }
         profile_div.style.display = 'block';
+
+        document.querySelector('#place-for-follow-btn').innerHTML = '';
+        const username_palce = document.querySelector('#username');
+        const followers_count = document.querySelector('#followers-count');
+        const following_count = document.querySelector('#following-count');
+        username_palce.textContent = '';
+        followers_count.textContent = '';
+        following_count.textContent = '';
         fetch(`/profile/${username}`)
         .then(response => response.json())
         .then(data => {
-            document.querySelector('#username').textContent = data.username;
-            document.querySelector('#followers-count').textContent = data.followers_count;
-            document.querySelector('#following-count').textContent = data.following_count;
-            document.querySelector('#place-for-follow-btn').innerHTML = '';
+            username_palce.textContent = data.username;
+            followers_count.textContent = data.followers_count;
+            following_count.textContent = data.following_count;
             if (data.authenticated & !data.mine) {
                 const follow_btn = document.createElement('span');
-                follow_btn.classList.add('btn', 'btn-primary', 'w-100');
-                follow_btn.textContent = data['following_status'] ? 'Unfollow' : 'Follow';
+                follow_btn.classList.add('btn', 'w-100', data.following_status ? 'btn-outline-primary' : 'btn-primary');
+                follow_btn.textContent = data.following_status ? 'Unfollow' : 'Follow';
                 document.querySelector('#place-for-follow-btn').appendChild(follow_btn);
+
+                follow_btn.addEventListener('click', () => {
+                    fetch('/follow', {
+                        method: 'PUT',
+                        body: JSON.stringify({
+                            user_id: data.id
+                        })
+                    })
+                    .then(response => {
+                        profile(username);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                });
             }
         })
         .catch((error) => {
@@ -207,9 +238,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     function load_feed(type = 'all', page = 1, additionally = null) {
-        // new_form();
+        // Don't show form for new post on profile page
+        if (type !== 'profile') {
+            profile_div.style.display = 'none';
+            new_form();
+        }
+
+        // Clear previous feed posts
         feed.innerHTML = '';
-        // const num_pages = null;
     
         fetch(`/feed/${type}?page=${page}&${additionally}`)
         .then(response => response.json())
@@ -223,6 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
                 const author = document.createElement('h3');
                 author.textContent = post.author;
+                author.style.cursor = 'pointer';
                 row.appendChild(author);
                 author.addEventListener('click', () => profile(post.author))
     

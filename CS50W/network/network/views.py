@@ -169,8 +169,8 @@ def edit(request, post_id):
                 if post.author == request.user:
                     post.content = new_content
                     post.save()
-                    return HttpResponse({"status": "True"})
-        return HttpResponse({"status": True})
+                    return JsonResponse({"status": "True"})
+        return JsonResponse({"status": True})
     return HttpResponseRedirect(reverse("index"))
 
 
@@ -189,3 +189,18 @@ def profile(request, username):
         "authenticated": authenticated,
         "mine": user.username == request.user.username
     })
+
+
+@csrf_exempt
+def follow(request):
+    if request.method == "PUT" and request.user.is_authenticated:
+        follower_id = request.user.id
+        followe_id = json.loads(request.body)["user_id"]
+        follow = Follow.objects.filter(follower_id = follower_id, followe_id = followe_id)
+        if follow:
+            follow.delete()
+        else:
+            follow = Follow(follower_id = follower_id, followe_id = followe_id)
+            follow.save()
+        return HttpResponse(status = 200)
+    return HttpResponseRedirect(reverse("index"))
