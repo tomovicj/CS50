@@ -86,7 +86,7 @@ def load_feed(request, type):
     elif type == "following":
         if request.user.is_authenticated:
             followers_qs = Follow.objects.filter(follower_id = request.user.id)
-            followers = [follower.pk for follower in followers_qs]
+            followers = [follow.followe_id for follow in followers_qs]
             posts = Post.objects.filter(author_id__in = followers).order_by('-time').values()
     elif type == "profile":
         id = request.GET.get("id")
@@ -174,7 +174,7 @@ def edit(request, post_id):
     return HttpResponseRedirect(reverse("index"))
 
 
-def profile(request, username):
+def load_profile(request, username):
     user = User.objects.filter(username = username).first()
     authenticated = request.user.is_authenticated
     following_status = False
@@ -204,3 +204,11 @@ def follow(request):
             follow.save()
         return HttpResponse(status = 200)
     return HttpResponseRedirect(reverse("index"))
+
+
+def profile(request, username):
+    if User.objects.filter(username = username).first():
+        return render(request, "network/index.html")
+    else:
+        return HttpResponseRedirect(reverse("index"))
+        

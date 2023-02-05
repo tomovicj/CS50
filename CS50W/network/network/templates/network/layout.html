@@ -10,21 +10,21 @@
     <body>
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Network</a>
+            <a class="navbar-brand pointer" href="/">Network</a>
           
             <div>
               <ul class="navbar-nav mr-auto">
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><strong>{{ user.username }}</strong></a>
+                        <span class="nav-link pointer" id="username-nav"><strong>{{ user.username }}</strong></span>
                     </li>
                 {% endif %}
                 <li class="nav-item">
-                  <span class="nav-link" id="all-posts" style="cursor: pointer;">All Posts</span>
+                  <span class="nav-link pointer" id="all-posts">All Posts</span>
                 </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <span class="nav-link" id="following" style="cursor: pointer;">Following</span>
+                        <span class="nav-link pointer" id="following">Following</span>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}">Log Out</a>

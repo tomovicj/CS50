@@ -1,8 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const nav = document.querySelector('nav');
     const create_new = document.querySelector('#new');
     const feed = document.querySelector('#feed');
     const profile_div = document.querySelector('#profile');
-
+    
 
     function new_form() {
         if (create_new !== null) {
@@ -17,9 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
             // Add event listener ONLY if there is no listener added before
             if (post_button.getAttribute('listener') !== 'true') {
+                post_button.setAttribute('listener', 'true');
                 post_button.addEventListener('click', function (event) {
-                    const elementClicked = event.target;
-                    elementClicked.setAttribute('listener', 'true');
                     // Send post to the server
                     event.preventDefault();
                     fetch('/post', {
@@ -91,8 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add event listener ONLY if there is no listener added before    
         if (edit_button.getAttribute('listener') !== 'true') {
             edit_button.addEventListener('click', function (event) {
-                const elementClicked = event.target;
-                elementClicked.setAttribute('listener', 'true');
+                edit_button.setAttribute('listener', 'true');
                 // Send post to the server
                 event.preventDefault();
                 fetch(`/edit/${post_id}`, {
@@ -121,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
        }
     }
 
-    function pagination(type, num_pages, on_page) {
+    function pagination(type, num_pages, on_page, additionally) {
         const pagination = document.createElement('ul');
         pagination.classList.add('pagination', 'justify-content-center', 'mt-3');
         feed.appendChild(pagination);
@@ -135,7 +134,12 @@ document.addEventListener('DOMContentLoaded', () => {
             previous.style.cursor = 'default';
         }
         else {
-            previous.addEventListener('click', () => load_feed(type, on_page - 1));
+            if (type === 'profile') {
+                previous.addEventListener('click', () => load_feed(type, on_page - 1, additionally));
+            }
+            else {
+                previous.addEventListener('click', () => load_feed(type, on_page - 1));
+            }
         }
 
         let span = document.createElement('span');
@@ -159,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             page.addEventListener('click', () => {
-                load_feed(type, i);
+                load_feed(type, i, additionally);
             })
         }
 
@@ -172,7 +176,12 @@ document.addEventListener('DOMContentLoaded', () => {
             next.style.cursor = 'default';
         }
         else {
-            next.addEventListener('click', () => load_feed(type, on_page + 1));
+            if (type === 'profile') {
+                next.addEventListener('click', () => load_feed(type, on_page + 1, additionally));
+            }
+            else {
+                next.addEventListener('click', () => load_feed(type, on_page + 1));
+            }
         }
         
         span = document.createElement('span');
@@ -184,9 +193,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     function profile(username) {
-        window.history.pushState({}, username, `/@${username}`);
+        window.history.pushState({}, `Social Network | ${username}`, `/@${username}`);
+        document.title = `Social Network | ${username}`;
         window.onpopstate = (event) => {
-            window.history.replaceState({}, '', '/');
+            window.history.pushState({}, 'Social Network', '/');
+            document.title = 'Social Network';
             load_feed();
         };
 
@@ -301,26 +312,51 @@ document.addEventListener('DOMContentLoaded', () => {
                     edit_link.textContent = 'Edit';
                     // edit_link.classList.add();
                     row.appendChild(edit_link);
-
+                    
                     edit_link.addEventListener('click', () => edit(post.id))
                 }
             });
-            pagination(type, data["num_pages"], data["on_page"]);
+            if (data.posts.length === 0){
+                const text = document.createElement('h2');
+                text.textContent = 'Sorry, there are no posts yet :(';
+                text.classList.add('text-center', 'mt-2');
+                feed.appendChild(text);
+            }
+            else {
+                pagination(type, data["num_pages"], data["on_page"], additionally);
+            }
+            
         })
         .catch((error) => {
             console.error('Error:', error);
         });
     }
     
-    // Reload page when 'logo' is clicked
-    document.querySelector('.navbar-brand').addEventListener('click', () => location.reload());
     // When clicked on All Posts load all posts
     document.querySelector('#all-posts').addEventListener('click', () => load_feed('all'));
     // When clicked on Following load following page
     try {
         document.querySelector('#following').addEventListener('click', () => load_feed('following'));
+        const username_nav = nav.querySelector('#username-nav');
+        username_nav.addEventListener('click', () => profile(username_nav.textContent));
     } catch {}
-    load_feed();
+    nav.querySelectorAll('span').forEach((link) => {
+        link.addEventListener('click', (event) => {
+            if (link.id !== 'username-nav') {
+                window.history.pushState({}, 'Social Network', '/');
+                document.title = 'Social Network';
+            }
+        });
+    })
+
+    // Load profile if page ends with '/@{username}'
+    if (window.location.pathname.slice(0, 2) === '/@') {
+        const username = window.location.pathname.substring(2);
+        profile(username);
+    }
+    else {
+        load_feed();
+    }
 });
 
 
