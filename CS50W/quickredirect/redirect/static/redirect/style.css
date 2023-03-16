@@ -1,0 +1,10 @@
+.pointer {
+    cursor: pointer;
+}
+
+.no-outline:active, .no-outline:focus {
+    outline: 0;
+    border: none;
+    outline-style: none;
+    -moz-outline-style: none;
+    }
