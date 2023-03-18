@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
+from django.core.paginator import Paginator
 from django.urls import reverse
 
 import json
@@ -81,24 +82,35 @@ def redirect(request, redirect_id):
 def index(request):
     if not request.user.is_authenticated:
         return render(request, "redirect/index.html")
-
-    if request.method == "GET":
-        redirects = list(Redirect.objects.filter(author_id = request.user.id).values())
-        for redirect in redirects:
-            redirect["data"] = list(Data.objects.filter(redirect_id = redirect["id"]).values())
-        return render(request, "redirect/dashboard.html", {"redirects": redirects})
+    message = {}
     if request.method == "POST":
         title = request.POST["title"]
         url = request.POST["url"]
         if title == "" or url == "":
-            return render(request, "redirect/dashboard.html", {"alert": "danger", "message": "Title and Url fields are required!"})     
-        while True:
-            id = generate_id()
-            if Redirect.objects.filter(id = id).first() is None:
-                break
-        try:
-            redirect = Redirect(id=id, title=title, url=url, author_id=request.user.id)
-            redirect.save()
-        except:
-            return render(request, "redirect/dashboard.html", {"alert": "danger", "message": "Looks like error occurred"})
-        return render(request, "redirect/dashboard.html", {"alert": "success", "message": "Successfully created!"})
+            message["type"] = "danger"
+            message["text"] = "Title and Url fields are required!"
+        if not message:
+            while True:
+                id = generate_id()
+                if Redirect.objects.filter(id = id).first() is None:
+                    break
+            try:
+                redirect = Redirect(id=id, title=title, url=url, author_id=request.user.id)
+                redirect.save()
+            except:
+                message["type"] = "danger"
+                message["text"] = "Looks like error occurred"
+            else:
+                message["type"] = "success"
+                message["text"] = "Successfully created!"
+    
+    redirects = list(Redirect.objects.filter(author_id = request.user.id).values())
+    paginator = Paginator(redirects, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    for redirect in page_obj:
+        redirect["data"] = list(Data.objects.filter(redirect_id = redirect["id"]).values())
+    return render(request, "redirect/dashboard.html", {"redirects": page_obj, "message": message})
+
+def profile(request):
+    pass

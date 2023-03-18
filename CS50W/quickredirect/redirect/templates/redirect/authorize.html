@@ -1,43 +1,36 @@
+{% extends 'redirect/layout.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QuickRedirect - Authorize</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'redirect/style.css' %}">
-</head>
-<body>
-  <div class="container w-50">
-    <div class="row text-center mx-0 mt-5" style="height: 5%;">
-      <div class="col border d-flex align-items-center bg-primary text-white" id="signin-button">Sign in</div>
-      <div class="col border d-flex align-items-center pointer" id="signup-button">Sign up</div>
-    </div>
-    <form action="/authorize" method="post" class="border p-3">
-        {% if message %}<div class="alert alert-danger" role="alert">{{ message }}</div>{% endif %}
-        {% csrf_token %}
-        <input type="hidden" name="type" value="login" id="auth-type">
-        <div class="mb-3" id="username-div" hidden>
-          <label for="username-input" class="form-label">Username:</label>
-          <input type="text" name="username" class="form-control" id="username-input">
-        </div>
-        <div class="mb-3">
-          <label for="email-input" class="form-label">Email address:</label>
-          <input type="email" name="email" class="form-control" id="email-input">
-        </div>
-        <div class="mb-3">
-          <label for="password-input" class="form-label">Password:</label>
-          <input type="password" name="password" class="form-control" id="password-input">
-        </div>
-        <div class="mb-3" id="password-confirm-div" hidden>
-          <label for="password-confirm-input" class="form-label">Reenter Password:</label>
-          <input type="password" name="password_confirm" class="form-control" id="password-confirm-input">
-        </div>
-        <button type="submit float-end" class="btn btn-primary" id="submit-button">Login</button>
-    </form>
+
+{% block title %} - Authorize{% endblock %}
+
+{% block body %}
+<div class="container w-50">
+  <div class="row text-center mx-0 mt-5" style="height: 3rem;">
+    <div class="col border d-flex align-items-center bg-primary text-white" id="signin-button" style="margin-bottom: -1px;">Sign in</div>
+    <div class="col border d-flex align-items-center pointer" id="signup-button" style="margin-bottom: -1px; margin-left: -1px;">Sign up</div>
   </div>
-  <script src="{% static 'redirect/authorize.js' %}"></script>
-</body>
-</html>
+  <form action="{% url 'authorize' %}" method="post" class="border p-3">
+      {% if message %}<div class="alert alert-danger" role="alert">{{ message }}</div>{% endif %}
+      {% csrf_token %}
+      <input type="hidden" name="type" value="login" id="auth-type">
+      <div class="mb-3" id="username-div" hidden>
+        <label for="username-input" class="form-label">Username:</label>
+        <input type="text" name="username" class="form-control" id="username-input">
+      </div>
+      <div class="mb-3">
+        <label for="email-input" class="form-label">Email address:</label>
+        <input type="email" name="email" class="form-control" id="email-input">
+      </div>
+      <div class="mb-3">
+        <label for="password-input" class="form-label">Password:</label>
+        <input type="password" name="password" class="form-control" id="password-input">
+      </div>
+      <div class="mb-3" id="password-confirm-div" hidden>
+        <label for="password-confirm-input" class="form-label">Reenter Password:</label>
+        <input type="password" name="password_confirm" class="form-control" id="password-confirm-input">
+      </div>
+      <button type="submit float-end" class="btn btn-primary" id="submit-button">Login</button>
+  </form>
+</div>
+<script src="{% static 'redirect/authorize.js' %}"></script>
+{% endblock %}

@@ -1,3 +1,7 @@
+// Get rid off Sign in button from nav bar
+document.querySelector('#nav-signin-button').hidden = true;
+
+
 addEventListener('DOMContentLoaded', () => {
     const signIN_button = document.querySelector('#signin-button');
     const signUP_button = document.querySelector('#signup-button');
