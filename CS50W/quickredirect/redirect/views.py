@@ -10,6 +10,7 @@ from .models import *
 
 from .helper import get_client_ip, generate_id
 
+
 def authorize(request):
     if not request.user.is_authenticated:
         if request.method == "GET":  
@@ -112,5 +113,49 @@ def index(request):
         redirect["data"] = list(Data.objects.filter(redirect_id = redirect["id"]).values())
     return render(request, "redirect/dashboard.html", {"redirects": page_obj, "message": message})
 
+
 def profile(request):
-    pass
+    message = {}
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("authorize"))
+    if request.method == "POST":
+        type = request.POST["type"]
+        givenInput = request.POST["new"]
+        if givenInput == "":
+            return render(request, "redirect/profile.html", {"message": {"type": "danger", "text": "Field is required"}})
+        user = request.user
+        if type == "username":
+            if givenInput != user.username:
+                try:
+                    user.username = givenInput
+                    user.save()
+                except: pass
+                else:
+                    message["type"] = "success"
+                    message["text"] = "Successfully changed username!"
+        if type == "email":
+            if givenInput != user.email:
+                try:
+                    user.email = givenInput
+                    user.save()
+                except: pass
+                else:
+                    message["type"] = "success"
+                    message["text"] = "Successfully changed email!"
+        if type == "password":
+            curPass = request.POST["cur_password"]
+            if curPass == givenInput:
+                return render(request, "redirect/profile.html", {"message": {"type": "danger", "text": "You can not set the new password to the given current password"}})
+            if user.check_password(curPass):
+                try:
+                    user.set_password(givenInput)
+                    user.save()
+                except: pass
+                else:
+                    # Keep user logged in after password change
+                    login(request, user)
+                    message["type"] = "success"
+                    message["text"] = "Successfully changed password!"
+            else:
+                return render(request, "redirect/profile.html", {"message": {"type": "danger", "text": "Looks like you entered the wrong current password"}})
+    return render(request, "redirect/profile.html", {"message": message})
