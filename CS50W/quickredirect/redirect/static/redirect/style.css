@@ -1,3 +1,27 @@
 .pointer {
     cursor: pointer;
 }
+
+.ad-place {
+    background-color: gray;
+    width: 300px;
+    height: 250px;
+    flex: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+}
+
+.ad {
+    text-align: center;
+}
+.ad p {
+    margin-bottom: 0px;
+}
+
+.scrollbar {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}
