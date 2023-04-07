@@ -11,8 +11,14 @@
         </div>
         <div class="mb-2">
             <label for="url-input" class="form-label mb-1">Url:</label>
-            <input type="text" name="url" class="form-control" id="url-input" required>
+            <input type="url" name="url" class="form-control" id="url-input" required>
         </div>
+        {% if perms.redirect.create_redirect_with_custom_id %}
+          <div class="mb-2">
+            <label for="url-input" class="form-label mb-1">ID: <em class="text-muted" style="font-size: 0.9rem;">not required</em></label>
+            <input type="text" name="custom_id" class="form-control" id="id-input" maxlength="15">
+          </div>
+        {% endif %}
         <input type="submit" value="Create" class="btn btn-primary w-100 mt-3">
     </form>
 </div>

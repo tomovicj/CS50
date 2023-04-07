@@ -4,33 +4,35 @@
 {% block title %} - Authorize{% endblock %}
 
 {% block body %}
-<div class="container w-50">
-  <div class="row text-center mx-0 mt-5" style="height: 3rem;">
-    <div class="col border d-flex align-items-center bg-primary text-white" id="signin-button" style="margin-bottom: -1px;">Sign in</div>
-    <div class="col border d-flex align-items-center pointer" id="signup-button" style="margin-bottom: -1px; margin-left: -1px;">Sign up</div>
+<div class="container-md d-flex justify-content-center my-5">
+  <div style="min-width: 50%;">
+    <div class="row text-center mx-0" style="height: 3rem;">
+      <div class="col border d-flex align-items-center bg-primary text-white" id="signin-button" style="margin-bottom: -1px;">Sign in</div>
+      <div class="col border d-flex align-items-center pointer" id="signup-button" style="margin-bottom: -1px; margin-left: -1px;">Sign up</div>
+    </div>
+    <form action="{% url 'authorize' %}" method="post" class="border p-3">
+        {% if message %}<div class="alert alert-danger" role="alert">{{ message }}</div>{% endif %}
+        {% csrf_token %}
+        <input type="hidden" name="type" value="login" id="auth-type">
+        <div class="mb-3" id="username-div" hidden>
+          <label for="username-input" class="form-label">Username:</label>
+          <input type="text" name="username" class="form-control" id="username-input">
+        </div>
+        <div class="mb-3">
+          <label for="email-input" class="form-label">Email address:</label>
+          <input type="email" name="email" class="form-control" id="email-input">
+        </div>
+        <div class="mb-3">
+          <label for="password-input" class="form-label">Password:</label>
+          <input type="password" name="password" class="form-control" id="password-input">
+        </div>
+        <div class="mb-3" id="password-confirm-div" hidden>
+          <label for="password-confirm-input" class="form-label">Reenter Password:</label>
+          <input type="password" name="password_confirm" class="form-control" id="password-confirm-input">
+        </div>
+        <button type="submit float-end" class="btn btn-primary" id="submit-button">Login</button>
+    </form>
   </div>
-  <form action="{% url 'authorize' %}" method="post" class="border p-3">
-      {% if message %}<div class="alert alert-danger" role="alert">{{ message }}</div>{% endif %}
-      {% csrf_token %}
-      <input type="hidden" name="type" value="login" id="auth-type">
-      <div class="mb-3" id="username-div" hidden>
-        <label for="username-input" class="form-label">Username:</label>
-        <input type="text" name="username" class="form-control" id="username-input">
-      </div>
-      <div class="mb-3">
-        <label for="email-input" class="form-label">Email address:</label>
-        <input type="email" name="email" class="form-control" id="email-input">
-      </div>
-      <div class="mb-3">
-        <label for="password-input" class="form-label">Password:</label>
-        <input type="password" name="password" class="form-control" id="password-input">
-      </div>
-      <div class="mb-3" id="password-confirm-div" hidden>
-        <label for="password-confirm-input" class="form-label">Reenter Password:</label>
-        <input type="password" name="password_confirm" class="form-control" id="password-confirm-input">
-      </div>
-      <button type="submit float-end" class="btn btn-primary" id="submit-button">Login</button>
-  </form>
 </div>
 <script src="{% static 'redirect/authorize.js' %}"></script>
 {% endblock %}

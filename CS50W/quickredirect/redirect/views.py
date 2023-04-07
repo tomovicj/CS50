@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import Group
 from django.core.paginator import Paginator
 from django.urls import reverse
 
@@ -159,3 +160,12 @@ def profile(request):
             else:
                 return render(request, "redirect/profile.html", {"message": {"type": "danger", "text": "Looks like you entered the wrong current password"}})
     return render(request, "redirect/profile.html", {"message": message})
+
+
+PREMIUM_GROUP = Group.objects.get(name="Premium Users")
+def premium(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("authorize"))
+    if request.method == "POST":
+            request.user.groups.add(PREMIUM_GROUP)
+    return HttpResponseRedirect(reverse("profile"))

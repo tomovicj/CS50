@@ -1,14 +1,41 @@
 {% extends 'redirect/layout.html' %}
 {% load static %}
+{% load group_manager %}
 
 {% block title %} - Profile{% endblock %}
 
 {% block body %}
 <div class="container">
-    {% if message %}<div class="container mb-3 alert alert-{{ message.type }}" role="alert">{{ message.text }}</div>{% endif %}
-    <p>Username: {{ request.user.username }} <span class="btn btn-link p-0 ms-2" id="username-edit"><em>edit</em></span></p>
-    <p>Email: {{ request.user.email }} <span class="btn btn-link p-0 ms-2" id="email-edit"><em>edit</em></span></p>
-    <p class="btn btn-link p-0" id="password-edit">Reset password</p>
+  <div class="row">
+    <div class="col-md-6 mt-4 mb-4">
+      {% if message %}<div class="container mb-3 alert alert-{{ message.type }}" role="alert">{{ message.text }}</div>{% endif %}
+      <p>Username: {{ request.user.username }}<span class="btn btn-link p-0 ms-2" id="username-edit"><em>edit</em></span></p>
+      <p>Email: {{ request.user.email }}<span class="btn btn-link p-0 ms-2" id="email-edit"><em>edit</em></span></p>
+      <p class="btn btn-link p-0" id="password-edit">Reset password</p>
+    </div>
+    <div class="col-md-6">
+      <div class="border border-primary rounded">
+        <div class="h4 m-0 p-3 text-primary border-bottom border-primary">Premium User Features:</div>
+        <ul class="m-2">
+          <li>Use custom redirect ID (E.g. <span class="btn btn-link p-0">quickredirect.com/customID</span>)</li>
+          <li>No ads</li>
+        </ul>
+        <div class="row m-0 border-top border-primary align-items-center">
+          {% if request.user|in_group:"Premium Users" %}
+            <p class="text-muted text-center m-2">You are already a Premium User</p>
+          {% else %}
+            <div class="col m-2 text-muted">Price: $10</div>
+            <div class="col d-flex flex-row-reverse">
+              <form method="post" action="{% url 'premium' %}">
+                {% csrf_token %}
+                <input type="submit" class="btn btn-primary m-2" id="buy-button" value="Buy Now">
+              </form>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Modal aka popup -->
