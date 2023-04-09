@@ -11,9 +11,14 @@
       <div class="col border d-flex align-items-center pointer" id="signup-button" style="margin-bottom: -1px; margin-left: -1px;">Sign up</div>
     </div>
     <form action="{% url 'authorize' %}" method="post" class="border p-3">
-        {% if message %}<div class="alert alert-danger" role="alert">{{ message }}</div>{% endif %}
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-danger mb-2" role="alert">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
         {% csrf_token %}
         <input type="hidden" name="type" value="login" id="auth-type">
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
         <div class="mb-3" id="username-div" hidden>
           <label for="username-input" class="form-label">Username:</label>
           <input type="text" name="username" class="form-control" id="username-input">

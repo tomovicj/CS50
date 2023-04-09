@@ -6,9 +6,13 @@
 
 {% block body %}
 <div class="container">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="container mb-3 alert {{message.tags}}" role="alert">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
   <div class="row">
     <div class="col-md-6 mt-4 mb-4">
-      {% if message %}<div class="container mb-3 alert alert-{{ message.type }}" role="alert">{{ message.text }}</div>{% endif %}
       <p>Username: {{ request.user.username }}<span class="btn btn-link p-0 ms-2" id="username-edit"><em>edit</em></span></p>
       <p>Email: {{ request.user.email }}<span class="btn btn-link p-0 ms-2" id="email-edit"><em>edit</em></span></p>
       <p class="btn btn-link p-0" id="password-edit">Reset password</p>
@@ -47,7 +51,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div class="alert alert-danger" role="alert" hidden></div>          
+        <div class="alert alert-danger" role="alert" id="popup-message" hidden></div>          
         <form method="post" action="{% url 'profile' %}" id="main">
           {% csrf_token %}
           <input type="hidden" name="type" value="">

@@ -3,7 +3,7 @@ const popUpEl = document.querySelector('#popUp');
 
 const form = document.querySelector('form[id="main"]');
 const title = document.querySelector('#popUpLabel');
-const error_msg = document.querySelector('div[role="alert"]');
+const error_msg = document.querySelector('#popup-message');
 const username_div = document.querySelector('#username-div');
 const email_div = document.querySelector('#email-div');
 const password_div = document.querySelector('#password-div');
@@ -63,7 +63,7 @@ document.querySelector('#edit-button').addEventListener('click', () => {
     }
     // Evaluate if inputted data is an email
     if (chosen_type === 'email') {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const emailRegex = /^([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+$/;
         if (!emailRegex.test(input.value)) {
             error_msg.textContent = 'Looks like your email address is invalid';
             error_msg.hidden = false;
