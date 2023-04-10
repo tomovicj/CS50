@@ -45,7 +45,7 @@
             const language = navigator.language;
             const font = detectFonts();
 
-            fetch('/{{ redirect_id }}', {
+            fetch('/{{ redirect_id }}/', {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json',

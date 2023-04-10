@@ -88,7 +88,7 @@ def redirect(request, redirect_id):
             data = Data(redirect_id = redirect_id ,ip = ip, user_agent=user_agent, screen_resolution=screen_resolution, language=language, fonts=fonts)
             data.save()
             return HttpResponse(status=200)
-    return HttpResponse(status=404)
+    return HttpResponseRedirect(reverse("index"))
 
 
 def index(request):
