@@ -85,10 +85,3 @@ document.querySelector('#edit-button').addEventListener('click', () => {
     }
     form.submit();
 })
-
-const buy_button = document.querySelector("#buy-button");
-buy_button.addEventListener('click', () => {
-    fetch("/profile/premium", {
-        method: "PUT",
-    });
-});
