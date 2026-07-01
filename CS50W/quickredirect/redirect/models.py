@@ -14,6 +14,9 @@ class Redirect(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)        
     time = models.DateTimeField(auto_now_add=True, blank=True)
 
+    def __str__(self):
+        return f"{self.title} ({self.url})"
+
 
 class Data(models.Model):
     redirect = models.ForeignKey(Redirect, on_delete=models.CASCADE)
@@ -23,3 +26,6 @@ class Data(models.Model):
     language = models.CharField(max_length=7, blank=True)
     fonts = models.CharField(max_length=11, blank=True)
     time = models.DateTimeField(auto_now_add=True, blank=True)
+
+    def __str__(self):
+        return f"Data for: {self.redirect.title} ({self.redirect.id})"

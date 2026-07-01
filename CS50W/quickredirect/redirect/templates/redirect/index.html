@@ -1,4 +1,35 @@
 {% extends 'redirect/layout.html' %}
 {% block body %}
-
+<div class="container text-center">
+  <h1>Shorten Your Links and Track Your Redirects</h1>
+  <h5>Effortlessly create custom, shortened links to share with your audience, and get insights into how many clicks you receive.</h5>
+  <a class="btn btn-primary btn-lg my-4" href="{% url 'authorize' %}">Sign up for Free</a>
+</div>
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-lg-5">
+      <div>
+        <h4>Simple and Powerful Link Shortening</h4>
+        <p>With our link shortening tool, you can easily create custom, shortened URLs to share with your audience. Simply paste in your long link, and we'll generate a short link that's easy to remember and share.</p>
+      </div>
+    </div>
+  </div>
+  <div class="row my-5">
+    <div class="col"></div>
+    <div class="col-lg-5">
+      <div>
+        <h4>Track Your Redirects</h4>
+        <p>Want to know how many clicks your links are getting? Our redirect tracker lets you track every click on your links, so you can see how your audience is engaging with your content.</p>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-5">
+      <div>
+        <h4>Personalized Link Management</h4>
+        <p>Keep all of your links organized with our personalized link management dashboard. Easily view and edit your links, and see detailed insights into how each link is performing.</p>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
